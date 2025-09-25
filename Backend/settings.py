@@ -2,6 +2,7 @@ from pathlib import Path
 from datetime import timedelta
 import os
 import dj_database_url
+from corsheaders.defaults import default_headers, default_methods
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -32,12 +33,15 @@ INSTALLED_APPS = [
     "usuarios",
 ]
 
+# -------------------------
+# Middleware
+# -------------------------
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",      # 👈 debe ser lo primero
+    "django.middleware.common.CommonMiddleware",  # 👈 y este justo después
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # archivos estáticos en producción
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -67,10 +71,25 @@ SIMPLE_JWT = {
 # -------------------------
 # CORS
 # -------------------------
+CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = [
-    "https://cashtrack-v2.netlify.app",  # frontend en Netlify
+    "https://cashtrack-v2.netlify.app",  # dominio frontend en Netlify
 ]
 CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    "content-type",
+    "authorization",
+]
+
+CORS_ALLOW_METHODS = list(default_methods) + [
+    "GET",
+    "POST",
+    "PUT",
+    "PATCH",
+    "DELETE",
+    "OPTIONS",
+]
 
 # -------------------------
 # Email
