@@ -11,16 +11,29 @@ from django.conf import settings
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
 from decimal import Decimal, InvalidOperation
+import os
+# --- Importar SendGrid ---
+import sendgrid
+from sendgrid.helpers.mail import Mail
 
 
 def enviar_otp(correo, code):
     asunto = "Tu código de uso temporal - CashTrack"
     mensaje = f"Tu código de verificación es: {code}\n\nExpira en 5 minutos."
-    remitente = settings.DEFAULT_FROM_EMAIL
+
     try:
-        send_mail(asunto, mensaje, remitente, [correo], fail_silently=False)
+        sg = sendgrid.SendGridAPIClient(api_key=settings.SENDGRID_API_KEY)
+        email = Mail(
+            from_email=settings.DEFAULT_FROM_EMAIL,  # remitente validado en SendGrid
+            to_emails=correo,
+            subject=asunto,
+            plain_text_content=mensaje,
+        )
+        response = sg.send(email)
+        print(f"Correo enviado a {correo}, status: {response.status_code}")
     except Exception as e:
         print(f"Error enviando correo: {e}")
+
 
 
 class RegisterView(APIView):
