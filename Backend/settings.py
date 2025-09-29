@@ -79,8 +79,10 @@ SIMPLE_JWT = {
 # -------------------------
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = [
-    "https://cashtrack-v2.netlify.app",  # dominio frontend en Netlify
+    "https://cashtrack-v2.netlify.app",
+    "https://cashtrack-v3.netlify.app",
 ]
+
 CORS_ALLOW_CREDENTIALS = True
 
 
