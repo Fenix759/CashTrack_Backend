@@ -1,8 +1,13 @@
 from pathlib import Path
 from datetime import timedelta
 import os
-import dj_database_url
-from corsheaders.defaults import default_headers, default_methods
+from pathlib import Path
+import os
+from dotenv import load_dotenv
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -11,6 +16,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # -------------------------
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-secret-key")
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+
 
 ALLOWED_HOSTS = [
     "localhost",
@@ -77,19 +83,6 @@ CORS_ALLOWED_ORIGINS = [
 ]
 CORS_ALLOW_CREDENTIALS = True
 
-CORS_ALLOW_HEADERS = list(default_headers) + [
-    "content-type",
-    "authorization",
-]
-
-CORS_ALLOW_METHODS = list(default_methods) + [
-    "GET",
-    "POST",
-    "PUT",
-    "PATCH",
-    "DELETE",
-    "OPTIONS",
-]
 
 # -------------------------
 # Email
@@ -127,11 +120,16 @@ WSGI_APPLICATION = "Backend.wsgi.application"
 # Base de datos
 # -------------------------
 DATABASES = {
-    "default": dj_database_url.config(
-        default=os.getenv("DATABASE_URL", "postgres://postgres:1234@localhost:5432/CashTrack"),
-        conn_max_age=600,
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv("DB_NAME"),
+        'USER': os.getenv("DB_USER"),
+        'PASSWORD': os.getenv("DB_PASSWORD"),
+        'HOST': os.getenv("DB_HOST"),
+        'PORT': os.getenv("DB_PORT"),
+    }
 }
+
 
 # -------------------------
 # Passwords

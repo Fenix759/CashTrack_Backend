@@ -14,7 +14,7 @@ from decimal import Decimal, InvalidOperation
 
 
 def enviar_otp(correo, code):
-    asunto = "Tu código OTP - CashTrack"
+    asunto = "Tu código de uso temporal - CashTrack"
     mensaje = f"Tu código de verificación es: {code}\n\nExpira en 5 minutos."
     remitente = settings.DEFAULT_FROM_EMAIL
     try:
